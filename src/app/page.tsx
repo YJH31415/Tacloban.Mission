@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import {
   ArrowRight,
@@ -42,7 +42,7 @@ const themeLabels: Record<ThemeName, string> = {
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState<ThemeName>("tropical");
-  const [departureDate, setDepartureDate] = useState("");
+  const departureDate = "";
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -54,15 +54,13 @@ export default function HomePage() {
     if (savedTheme && validThemes.includes(savedTheme)) setTheme(savedTheme);
   }, []);
 
-  const dday = useMemo(() => {
-    if (!departureDate) return null;
-    const now = new Date();
-    const target = new Date(`${departureDate}T00:00:00+09:00`);
-    const today = new Date(
-      now.toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" }) + "T00:00:00+09:00",
-    );
-    return Math.ceil((target.getTime() - today.getTime()) / 86_400_000);
-  }, [departureDate]);
+  const dday = departureDate
+    ? Math.ceil(
+        (new Date(`${departureDate}T00:00:00+09:00`).getTime() -
+          new Date(new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" }) + "T00:00:00+09:00").getTime()) /
+          86_400_000,
+      )
+    : null;
 
   function changeTheme(nextTheme: ThemeName) {
     setTheme(nextTheme);
@@ -258,7 +256,7 @@ export default function HomePage() {
                 <a className="admin-link" href="#admin">
                   <Settings2 size={17} /> 관리자
                 </a>
-                <span>TACTLOBAN · LEYTE, PHILIPPINES</span>
+                <span>TACLOBAN · LEYTE, PHILIPPINES</span>
               </div>
             </motion.aside>
           </>
